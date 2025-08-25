@@ -22,12 +22,6 @@ jobs:
         with:
           python-version: '3.10.12'
 
-      - name: Debug - Verificando o path
-        run: |
-          pwd
-          ls -ls
-          python3 --version
-
       - name: Instalar dependências do code-freezing
         working-directory: code-freezing
         run: |
@@ -36,8 +30,14 @@ jobs:
 
       - name: Rodar verificação de code freeze
         working-directory: code-freezing
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
         run: |
           python3 code-freezing.py
+
+      - name: Verificando Status code
+        run: |
+          echo $?
 
   build:
     runs-on: ubuntu-latest
