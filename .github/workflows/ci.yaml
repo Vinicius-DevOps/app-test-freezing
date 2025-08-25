@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: ["feat/ci"]
+
+jobs:
+  code-freeze-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo atual
+        uses: actions/checkout@v4
+
+      - name: Checkout code-freezing
+        uses: actions/checkout@v4
+        with:
+          repository: Vinicius-DevOps/code-freezing
+          path: code-freezing  # subpasta com o script
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Debug - Verificando o path
+        run: |
+          pwd
+          ls
+
+      - name: Instalar dependências do code-freezing
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r code-freezing/requirements.txt
+
+      - name: Rodar verificação de code freeze
+        run: |
+          python3 code-freezing/code-freezing.py
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo atual
+        uses: actions/checkout@v4
+
+      - name: Simulando o build do projeto
+        run: |
+          echo "Simulando o build do projeto..."
